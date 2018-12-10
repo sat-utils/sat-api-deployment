@@ -54,13 +54,13 @@ workflows:
   version: 2
   prod:
     jobs:
-      - test
+      - prod
           filters:
             branches:
               only: master
   dev:
     jobs:
-      - docker
+      - dev
           filters:
             branches:
               only: develop
