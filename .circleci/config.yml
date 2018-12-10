@@ -1,0 +1,66 @@
+version: 2
+
+references:
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - v1-repo-{{ .Branch }}-{{ .Revision }}
+        - v1-repo-{{ .Branch }}
+        - v1-repo
+
+jobs:
+  prod:
+    docker:
+      - image: circleci/node:8.11
+    steps:
+      - *restore_repo
+      - checkout
+      - run:
+          name: Install
+          command: |
+            yarn
+      - run:
+          name: Build and test
+          command: |
+            yarn build
+            yarn test
+      - run:
+          name: Deploy to aws
+          command: |
+            if [[  "$CIRCLE_BRANCH" == 'master' ]]; then
+              # TODO
+            fi
+
+  dev:
+    steps:
+      - *restore_repo
+      - checkout
+      - save_cache:
+          key: v1-repo-{{ .Branch }}-{{ .Revision }}
+      - run:
+          name: Build Docker image
+          command: |
+            touch .env
+            docker-compose build
+      - run:
+          name: Deploy
+          command: |
+            if [[  "$CIRCLE_BRANCH" == 'master' ]]; then
+              # TODO
+            fi
+
+
+workflows:
+  version: 2
+  prod:
+    jobs:
+      - test
+          filters:
+            branches:
+              only: master
+  dev:
+    jobs:
+      - docker
+          filters:
+            branches:
+              only: develop
