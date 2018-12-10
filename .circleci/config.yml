@@ -28,6 +28,7 @@ jobs:
           name: Deploy to aws
           command: |
             if [[  "$CIRCLE_BRANCH" == 'master' ]]; then
+              echo 'master'
               # TODO
             fi
 
@@ -45,7 +46,8 @@ jobs:
       - run:
           name: Deploy
           command: |
-            if [[  "$CIRCLE_BRANCH" == 'master' ]]; then
+            if [[  "$CIRCLE_BRANCH" == 'develop' ]]; then
+              echo 'dev'
               # TODO
             fi
 
@@ -54,13 +56,13 @@ workflows:
   version: 2
   prod:
     jobs:
-      - prod
+      - prod:
           filters:
             branches:
               only: master
   dev:
     jobs:
-      - dev
+      - dev:
           filters:
             branches:
               only: develop
