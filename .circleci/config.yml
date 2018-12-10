@@ -20,11 +20,6 @@ jobs:
           command: |
             yarn
       - run:
-          name: Build and test
-          command: |
-            yarn build
-            yarn test
-      - run:
           name: Deploy to aws
           command: |
             if [[  "$CIRCLE_BRANCH" == 'master' ]]; then
