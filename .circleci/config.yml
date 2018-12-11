@@ -46,7 +46,10 @@ jobs:
       - run:
           name: Deploy develop to AWS
           command: |
-            docker run --rm -it sat-api-deployment:latest \
+            echo AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} >> .env
+            echo AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} >> .env
+            echo AWS_REGION=${AWS_REGION} >> .env
+            docker run --rm -it --env-file .env sat-api-deployment:latest \
               ./node_modules/.bin/kes cf deploy \
               --template node_modules/@sat-utils/api/template \
               --deployment dev --showOutputs
