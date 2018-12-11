@@ -14,14 +14,14 @@ default:
         STAC_DESCRIPTION: "Development Seed's sat-api for Public Datasets (landsat-8, sentinel-2)"
 
 dev:
-  stackName: sat-api-dev
+  stackName: sat-api
   es:
     instanceCount: 2
     instanceType: m3.medium.elasticsearch
     volumeSize: 80
 
 prod:
-  stackName: sat-api
+  stackName: sat-api-prod
   es:
     instanceCount: 2
     instanceType: m3.medium.elasticsearch

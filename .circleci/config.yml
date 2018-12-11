@@ -9,25 +9,27 @@ references:
         - v1-repo
 
 jobs:
-  prod:
+  production:
     docker:
       - image: circleci/node:8.11
     steps:
       - *restore_repo
       - checkout
+      - save_cache:
+          key: v1-repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ~/project
       - run:
           name: Install
-          command: |
-            yarn
+          command: yarn
       - run:
-          name: Deploy to aws
+          name: Deploy production to AWS
           command: |
-            if [[  "$CIRCLE_BRANCH" == 'master' ]]; then
-              echo 'master'
-              # TODO
-            fi
+            ./node_modules/.bin/kes cf deploy \
+              --template node_modules/@sat-utils/api/template \
+              --deployment prod --showOutputs
 
-  dev:
+  develop:
     machine:
       docker_layer_caching: true
     steps:
@@ -35,31 +37,31 @@ jobs:
       - checkout
       - save_cache:
           key: v1-repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - ~/project
       - run:
           name: Build Docker image
           command: |
-            touch .env
-            docker-compose build
+            docker build -t sat-api-deployment:latest . 
       - run:
-          name: Deploy
+          name: Deploy develop to AWS
           command: |
-            if [[  "$CIRCLE_BRANCH" == 'develop' ]]; then
-              echo 'dev'
-              # TODO
-            fi
-
+            docker run --rm -it sat-api-deployment:latest \
+              ./node_modules/.bin/kes cf deploy \
+              --template node_modules/@sat-utils/api/template \
+              --deployment dev --showOutputs
 
 workflows:
   version: 2
-  prod:
+  production:
     jobs:
-      - prod:
+      - production:
           filters:
             branches:
               only: master
-  dev:
+  develop:
     jobs:
-      - dev:
+      - develop:
           filters:
             branches:
               only: develop

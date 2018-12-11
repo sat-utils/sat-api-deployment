@@ -1,13 +1,13 @@
 # required envvars
 # - ES_HOST: Elasticsearch https endpoint
 
-FROM satutils/sat-api:latest
+FROM satutils/sat-api:develop
 
-WORKDIR /home/satapi-deployment
+WORKDIR ${HOME}/satapi-deployment
 
-COPY package.json /home/satapi-deployment/
+COPY package.json ./
 
 RUN \
     yarn; yarn linkall
 
-COPY . /home/satapi-deploy
+COPY . ${HOME}/satapi-deployment
