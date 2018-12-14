@@ -1,10 +1,10 @@
 # sat-api-deployment
 
-This deployment powers https://sat-api.developmentseed.org/search. We use [kes](https://www.npmjs.com/package/kes) to deploy sat-api as an application to AWS.
+This deployment powers https://sat-api.developmentseed.org/stac. We use [kes](https://www.npmjs.com/package/kes) to deploy sat-api as an application to AWS.
 
 For the deployment to work we use a kes template included in the [@sat-utils/api](https://www.npmjs.com/package/@sat-utils/api) package. This package has all the necessary resources needed for a successful deployment of sat-api.
 
-You can override all the configurations and options in this template by adding override files to the `.kes/config.yml` folder.
+You can override all the configurations and options in this template by modifying the `.kes/config.yml` folder.
 
 ## Install
 
