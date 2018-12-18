@@ -40,11 +40,6 @@ Then run this command:
 
 The command will return the api endpoint that is created by the operation.
 
-### Deploy Devseed's Dev stack
-
-This command only works if you have access to Devseed's AWS account
-
-     $ ./node_modules/.bin/kes cf deploy --region us-east-1 --template node_modules/@sat-utils/api/template --deployment dev --profile <replace-me> --showOutputs
 
 ### Deployer Role
 
@@ -70,3 +65,59 @@ Then create a user on AWS and give it this policy permission. Replace the value 
 ```
 
 When running the deployment command make sure to [include the `--role` flag](.circleci/config.yml#L17).
+
+
+## Allow access to Kibana
+
+For development purposes you may want to access the Elasticsearch Kibana interface from your local machine. If so, you will need to edit the access policy to allow access from your IP. In the AWS console for the Elasticsearch that was just deployed modify the access policy and add this entry to the "Statements" array:
+
+```json
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "es:*",
+      "Resource": "arn:aws:es:<region>:<account>:domain/<stackName>-es6/*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "<your_ip>"
+        }
+      }
+    }
+```
+
+## Ingesting data
+
+### Ingest collections
+
+### Adding SNS subscription
+
+The sat-api ingest function can be used to ingest SNS messages of two types:
+- An s3 updated message
+- The STAC record itself
+
+There are several public datasets that publish the complete STAC record to an SNS topic:
+  - Landsat-8 L1: arn:aws:sns:us-west-2:552188055668:landsat-stac
+  - Sentinel-2 L1:
+
+Once subscribed any future SNS messages will be ingested into the backend and be immediately available to the API.
+
+### Ingesting catalogs
+
+In order to backfill data a STAC static catalog can be ingested starting from any node in the catalog. Child links within catalogs will be followed and any Collection or Item will be ingested. To ingest a catalog the ingest Lambda is invoked with a payload including a "url" field, along with some optional parameters:
+
+- **url** (required): The http(s) URL to a node in a static STAC (i.e., a Catalog, Collection, or Item).
+- **recursive**: If set to false, child links will not be followed from the input catalog node. *Defaults to true.*
+- **collectionsOnly**: If set to true, only Collections will be ingested. Child links will be followed until a Collection is found and ingested. It is assumed Collections do not appear below other Collections within a STAC tree. *Defaults to false.*
+
+### Using Fargate to run large ingestion jobs
+
+When ingesting a catalog using the URL field, the Lambda function will attempt the ingest. However the time required for any sizable catalog may be longer than the maximum allowed by Lambda functions (15 minutes). In those cases the ingest job can be spawned, from the Lambda function, as a Fargate task. This fires up a Fargate instance using a Docker image containing the sat-api code and runs the ingest task on the provided URL, and there is no time limit. To run Ingest as a Fargate the normal parameters for ingesting a catalog are simply provided nested under the "fargate" field. While this means that the recursive and collectionsOnly fields can be provided to a Fargate task, the reality is that not using the defaults for these parameters means that your ingest task will very likely fit within the time limit for Lambda functions. Therefore, Fargate tasks will typically just contain the path a STAC node to be traversed and everything undernearth it will be ingested.
+
+```
+{
+    "fargate": {
+        "url": "url/to/catalog.json"
+    }
+}
