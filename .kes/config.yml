@@ -1,5 +1,4 @@
 default:
-  stackName: change-me
   system_bucket: sat-api-us-east-1
 
   tags:
@@ -11,7 +10,7 @@ default:
         STAC_TITLE: "sat-api for public datasets"
         STAC_ID: "sat-api"
         STAC_VERSION: "0.6.0"
-        STAC_DESCRIPTION: "Development Seed's sat-api for Public Datasets (landsat-8, sentinel-2)"
+        STAC_DESCRIPTION: "sat-api for public datasets by Development Seed"
     ingest:
       envs:
         SUBNETS: "subnet-151f3719 subnet-3dd20e76 subnet-53776a7f subnet-c641579c subnet-dc358bb8 subnet-ef13ced0"
@@ -34,3 +33,6 @@ prod:
     instanceCount: 2
     instanceType: m3.medium.elasticsearch
     volumeSize: 80
+  tasks:
+    SatApi:
+      image: satutils/sat-api:develop
