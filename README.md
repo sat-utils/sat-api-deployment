@@ -86,7 +86,7 @@ name-of-my-deployment:
 
 Run this command to deploy a stack:
 
-     $ ./node_modules/.bin/kes cf deploy --region us-east-1 --profile <profile-name> --template node_modules/@sat-utils/api/template --deployment <name-of-deployment> --showOutputs
+     $ ./node_modules/.bin/kes cf deploy --region us-east-1 --profile <profile-name> --template .kes/template --deployment <name-of-deployment> --showOutputs
 
 The command will return the API endpoint that is created by the operation.
 
