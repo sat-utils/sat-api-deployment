@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+    deploy
+
+    Sample SAM Template for deploy
+    
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+    Function:
+        Timeout: 3
+
+
+Resources:
+
+    API:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: 'node_modules/@sat-utils/api'
+            Handler: index.handler
+            Runtime: nodejs8.10
+            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+                Variables:
+                    PARAM1: VALUE
+            Timeout: 100
+            Events:
+                # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+                #test:
+                #    Type: Api
+                #    Properties:
+                #        Path: /test
+                #        Method: get
+                stac:    
+                    Type: Api
+                    Properties:
+                        Path: /{proxy+}
+                        Method: POST GET
+                root:
+                    Type: Api
+                    Properties:
+                        Path: /
+                        Method: get
+    Ingest:
+        Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+        Properties:
+            CodeUri: 'node_modules/@sat-utils/ingest'
+            Handler: index.handler
+            Runtime: nodejs8.10
+            Environment: # More info about Env Vars: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#environment-object
+                Variables:
+                    PARAM1: VALUE
+            Timeout: 900
+            MemorySize: 768
+
+
+Outputs:
+
+    HelloWorldApi:
+      Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+
+    HelloWorldFunction:
+      Description: "Hello World Lambda Function ARN"
+      Value: !GetAtt HelloWorldFunction.Arn
+
+    HelloWorldFunctionIamRole:
+      Description: "Implicit IAM Role created for Hello World function"
+      Value: !GetAtt HelloWorldFunctionRole.Arn
