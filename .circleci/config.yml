@@ -46,7 +46,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build -t sat-api-deployment . 
+            docker build -t sat-api-deployment . --no-cache
       - run:
           name: Deploy develop to AWS
           command: |
