@@ -55,7 +55,7 @@ jobs:
             docker run --rm -it --env-file .env sat-api-deployment \
               /home/sat-utils/satapi-deployment/node_modules/.bin/kes cf deploy \
               --template .kes/template \
-              --deployment prod --showOutputs
+              --deployment dev --showOutputs
 
 workflows:
   version: 2
