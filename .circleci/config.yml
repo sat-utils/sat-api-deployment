@@ -31,6 +31,7 @@ jobs:
             ./node_modules/.bin/kes cf deploy \
               --template .kes/template \
               --deployment prod --showOutputs
+          no_output_timeout: 30m
 
   develop:
     machine:
@@ -56,6 +57,7 @@ jobs:
               /home/sat-utils/satapi-deployment/node_modules/.bin/kes cf deploy \
               --template .kes/template \
               --deployment dev --showOutputs
+          no_output_timeout: 30m
 
 workflows:
   version: 2
