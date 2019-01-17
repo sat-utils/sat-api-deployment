@@ -1,6 +1,6 @@
 {
   "name": "sat-api-deployment",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "An instance of sat-api for Development Seed",
   "main": "index.js",
   "scripts": {
