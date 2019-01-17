@@ -11,7 +11,7 @@ default:
 
   es:
     name: es6
-    version: '6.3'
+    version: '6.0'
     instanceCount: 1
     instanceType: t2.small.elasticsearch
     volumeSize: 35 
