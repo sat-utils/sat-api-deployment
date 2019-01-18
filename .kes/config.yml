@@ -23,9 +23,9 @@ dev:
     instanceCount: 2
     instanceType: m3.medium.elasticsearch
     volumeSize: 80
-  #tasks:
-  #  SatApi:
-  #    image: satutils/sat-api:develop
+  tasks:
+    SatApi:
+      image: satutils/sat-api:develop
 
 prod:
   stackName: sat-api-prod
