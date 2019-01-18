@@ -31,6 +31,7 @@ jobs:
             ./node_modules/.bin/kes cf deploy \
               --template .kes/template \
               --deployment prod --showOutputs
+          no_output_timeout: 30m
 
   develop:
     machine:
@@ -45,7 +46,7 @@ jobs:
       - run:
           name: Build Docker image
           command: |
-            docker build -t sat-api-deployment . 
+            docker build -t sat-api-deployment . --no-cache
       - run:
           name: Deploy develop to AWS
           command: |
@@ -56,6 +57,7 @@ jobs:
               /home/sat-utils/satapi-deployment/node_modules/.bin/kes cf deploy \
               --template .kes/template \
               --deployment dev --showOutputs
+          no_output_timeout: 30m
 
 workflows:
   version: 2
@@ -65,9 +67,9 @@ workflows:
           filters:
             branches:
               only: master
-  #develop:
-  #  jobs:
-  #    - develop:
-  #        filters:
-  #          branches:
-  #            only: develop
+  develop:
+    jobs:
+      - develop:
+          filters:
+            branches:
+              only: develop
