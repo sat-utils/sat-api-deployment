@@ -43,6 +43,10 @@ default:
           path: '{proxy+}'
           method: get
           cors: true
+        - api: stac
+          path: '{proxy+}'
+          method: post
+          cors: true
 
   tasks:
     SatApi:
