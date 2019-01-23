@@ -43,10 +43,14 @@ default:
           path: '{proxy+}'
           method: get
           cors: true
+        - api: stac
+          path: '{proxy+}'
+          method: post
+          cors: true
 
   tasks:
     SatApi:
-      image: satutils/sat-api:0.2.1
+      image: satutils/sat-api:latest
       cpu: 1024
       memory: 2048
       envs:
