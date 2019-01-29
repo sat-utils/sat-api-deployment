@@ -18,8 +18,8 @@
   },
   "homepage": "https://github.com/sat-utils/sat-api-deployment#readme",
   "dependencies": {
-    "@sat-utils/api": "^0.2.2",
-    "@sat-utils/ingest": "^0.2.2",
+    "@sat-utils/api": "^0.2.3",
+    "@sat-utils/ingest": "^0.2.3",
     "kes": "^2.2.2"
   }
 }

@@ -26,7 +26,7 @@ dev:
     volumeSize: 80
   tasks:
     SatApi:
-      image: satutils/sat-api:0.2.3-b1
+      image: satutils/sat-api:0.2.3
 
 prod:
   stackName: sat-api-prod
@@ -36,4 +36,4 @@ prod:
     volumeSize: 80
   tasks:
     SatApi:
-      image: satutils/sat-api:0.2.3-b1
+      image: satutils/sat-api:0.2.3
