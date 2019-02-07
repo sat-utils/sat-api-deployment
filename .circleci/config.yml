@@ -53,10 +53,10 @@ jobs:
             echo AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} >> .env
             echo AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} >> .env
             echo AWS_REGION=${AWS_REGION} >> .env
-            #docker run --rm -it --env-file .env sat-api-deployment \
-            #  /home/sat-utils/satapi-deployment/node_modules/.bin/kes cf deploy \
-            #  --template .kes/template \
-            #  --deployment dev --showOutputs
+            docker run --rm -it --env-file .env sat-api-deployment \
+              /home/sat-utils/satapi-deployment/node_modules/.bin/kes cf deploy \
+              --template .kes/template \
+              --deployment dev --showOutputs
           no_output_timeout: 30m
 
 workflows:
