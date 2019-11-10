@@ -14,8 +14,6 @@ default:
         STAC_DOCS_URL: "http://sat-utils.github.io/sat-api/"
     ingest:
       envs:
-        SUBNETS: "subnet-151f3719 subnet-3dd20e76 subnet-53776a7f subnet-c641579c subnet-dc358bb8 subnet-ef13ced0"
-        SECURITY_GROUPS: "sg-b0ef3ac2"
         ES_BATCH_SIZE: 1000
 
 dev:
@@ -24,9 +22,6 @@ dev:
     instanceCount: 2
     instanceType: m3.medium.elasticsearch
     volumeSize: 80
-  tasks:
-    SatApi:
-      image: satutils/sat-api:0.2.3
 
 prod:
   stackName: sat-api-prod
@@ -34,6 +29,3 @@ prod:
     instanceCount: 2
     instanceType: m3.medium.elasticsearch
     volumeSize: 80
-  tasks:
-    SatApi:
-      image: satutils/sat-api:0.2.3
