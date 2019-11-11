@@ -48,8 +48,6 @@ Make the following changes:
 - change `system_bucket` to a bucket name for which you have access to. This is used for uploading Lambda function code packages.
 - Set any `tags` to be applied to all resources created in the stack
 - Update the environment variables under `lambdas:api:envs` with details about your API
-- Update `lambdas:ingest:envs:SUBNETS` with a list of subnet IDs in your AWS account for use with Fargate
-- Update `lambdas:ingest:envs:SUBNETS` to a security group ID in your account for use with Fargate
 - `ES_BATCH_SIZE` is a good default for writing to Elasticsearch from Lambda or Fargate to a bucket in the same region. It should not be set to higher than 2000 due to a total payload size limit with Elasticsearch.
 
 After changing the defaults review the settings for each of the deployments:
@@ -61,9 +59,6 @@ dev:
     instanceCount: 2
     instanceType: m3.medium.elasticsearch
     volumeSize: 80
-  tasks:
-    SatApi:
-      image: satutils/sat-api:develop
 
 prod:
   stackName: sat-api-prod
@@ -169,16 +164,7 @@ Ingest a single item:
 }
 ```
 
-### Using Fargate to run large ingestion jobs
+### Running large ingestion jobs
 
-When ingesting a catalog using the URL field, the Lambda function will attempt the ingest. However the time required for any sizable catalog may be longer than the maximum allowed by Lambda functions (15 minutes). In those cases the ingest job can be spawned, from the Lambda function, as a Fargate task. This fires up a Fargate instance using a Docker image containing the sat-api code and runs the ingest task on the provided URL, and there is no time limit. To run Ingest as a Fargate the normal parameters for ingesting a catalog are simply provided nested under the "fargate" field. While this means that the recursive and collectionsOnly fields can be provided to a Fargate task, the reality is that not using the defaults for these parameters means that your ingest task will very likely fit within the time limit for Lambda functions. Therefore, Fargate tasks will typically just contain the path a STAC node to be traversed and everything undernearth it will be ingested.
+The time required to ingest a sizable catalog may be longer than the maximum allowed by Lambda functions (15 minutes). In those cases use sat-api-lib on an EC2 to ingest the catalogs.
 
-```json
-{
-    "fargate": {
-        "url": "url/to/catalog.json"
-    }
-}
-```
-
-The other payload parameters (recursive and collectionsOnly) can be provided and wil be honored by the Fargate task, however if only Collections or a single Item are being ingested a Fargate task is probably not needed and the Lambda function should be able to handle it.
